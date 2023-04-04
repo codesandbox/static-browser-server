@@ -171,7 +171,10 @@ self.addEventListener("fetch", (event) => {
   const req = event.request.clone();
   const parsedUrl = new URL(req.url);
 
-  if (parsedUrl.pathname.startsWith("/__csb")) {
+  if (
+    parsedUrl.origin !== self.location.origin ||
+    parsedUrl.pathname.startsWith("/__csb")
+  ) {
     return;
   }
 
