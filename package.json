@@ -1,11 +1,18 @@
 {
   "name": "static-browser-server",
   "version": "1.0.6",
-  "main": "./out/lib/main.js",
-  "types": "./out/lib/main.d.ts",
   "repository": "https://github.com/codesandbox/static-browser-server.git",
   "author": "Jasper De Moor <jasperdemoor@gmail.com>",
   "license": "Apache-2.0",
+  "module": "./out/esm/main.js",
+  "main": "./out/esm/main.js",
+  "exports": {
+    ".": {
+      "import": "./out/esm/main.js",
+      "types": "./out/lib/main.d.ts",
+      "require": "./out/cjs/main.cjs"
+    }
+  },
   "files": [
     "src",
     "out",
@@ -16,7 +23,7 @@
   "scripts": {
     "build:relay": "node -r esbuild-register ./build-relay.ts",
     "build:types": "tsc -p tsconfig.types.json",
-    "build:lib": "esbuild ./src/lib/main.ts --bundle --outdir=out/lib --format=cjs && pnpm build:types",
+    "build:lib": "esbuild ./src/lib/main.ts --bundle --outdir=out/cjs --format=cjs && esbuild ./src/lib/main.ts --bundle --outdir=out/esm --format=esm && pnpm build:types",
     "build:demo": "node -r esbuild-register ./build-demo.ts",
     "build": "rm -rf out && pnpm build:lib && pnpm build:relay && pnpm build:demo",
     "build:prod": "MINIFY=true && pnpm build",
